@@ -1,0 +1,45 @@
+import 'dart:ui';
+
+/// Used to calculate device independent pixels.
+class Dip {
+  /// Creates a device independent pixel calculator.
+  ///
+  /// [designWidth] and [designHeight] are the width and height
+  /// of the designs viewport respectively.
+  const Dip({required this.designWidth, required this.designHeight});
+
+  /// The width of the design's viewport in pixels.
+  final double designWidth;
+
+  /// The height of the design's viewport in pixels.
+  final double designHeight;
+
+  /// If the design is in landscape orientation.
+  bool get designLandscape => designWidth > designHeight;
+
+  /// Calculates device independent pixels.
+  ///
+  /// The [designPixels] are the length in pixels specified in the design.
+  double call(double designPixels) {
+    final pSize = window.physicalSize;
+    final pLandscape = pSize.width > pSize.height;
+
+    if (designLandscape) {
+      if (pLandscape) {
+        return (designPixels * pSize.width) /
+            (designWidth * window.devicePixelRatio);
+      } else {
+        return (designPixels * pSize.width) /
+            (designHeight * window.devicePixelRatio);
+      }
+    } else {
+      if (pLandscape) {
+        return (designPixels * pSize.height) /
+            (designWidth * window.devicePixelRatio);
+      } else {
+        return (designPixels * pSize.height) /
+            (designHeight * window.devicePixelRatio);
+      }
+    }
+  }
+}
